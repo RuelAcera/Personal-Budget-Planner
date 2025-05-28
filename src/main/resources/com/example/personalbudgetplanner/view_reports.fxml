@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="500" prefWidth="800" style="-fx-background-color: linear-gradient(to bottom right, #f0f4f8, #d9e2ec);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalbudgetplanner.ViewReportsController">
+
+    <!-- Top bar with title and back button -->
+    <top>
+        <HBox prefHeight="13.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #2b6cb0;">
+            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+
+            <Label style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="View Reports" />
+
+            <Pane HBox.hgrow="ALWAYS" />
+
+            <Button fx:id="backButton" onAction="#onBackClick" style="-fx-background-color: white; -fx-text-fill: #2b6cb0; -fx-font-weight: bold; -fx-background-radius: 5;" text="Back" />
+        </HBox>
+    </top>
+
+    <!-- Center VBox with month selector, buttons, and textarea -->
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20" style="-fx-padding: 40;">
+
+            <!-- Month selection ComboBox -->
+            <ComboBox fx:id="monthComboBox" prefWidth="160" promptText="Select Month" />
+
+            <Button onAction="#onGenerateReportClick" prefWidth="160" style="-fx-background-color: #38b2ac; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 12;" text="Generate Report" />
+
+            <Button onAction="#onResetClick" prefWidth="160" style="-fx-background-color: #e53e3e; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 12;" text="Close" />
+
+            <TextArea fx:id="reportTextArea" editable="false" prefHeight="300" prefWidth="700" promptText="Your reports will appear here..." style="-fx-font-size: 14px; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #38b2ac;" wrapText="true" />
+
+        </VBox>
+    </center>
+</BorderPane>

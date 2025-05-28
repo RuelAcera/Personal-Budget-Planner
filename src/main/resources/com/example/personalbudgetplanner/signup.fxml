@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="500.0" prefWidth="400" spacing="20" style="-fx-background-color: linear-gradient(to bottom right, #e2e8f0, #cbd5e0);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalbudgetplanner.SignUpController">
+
+    <padding>
+        <Insets bottom="40" left="40" right="40" top="40" />
+    </padding>
+
+    <VBox alignment="CENTER" prefHeight="478.0" prefWidth="457.0" spacing="20" style="-fx-background-color: white; -fx-background-radius: 16; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);">
+
+        <Label style="-fx-font-size: 28px; -fx-text-fill: #2b6cb0; -fx-font-weight: bold;" text="Create Account" />
+
+        <TextField fx:id="newUsernameField" promptText="New Username" style="-fx-background-radius: 10; -fx-border-color: #cbd5e0; -fx-border-radius: 10; -fx-padding: 10;" />
+
+        <PasswordField fx:id="newPasswordField" promptText="New Password" style="-fx-background-radius: 10; -fx-border-color: #cbd5e0; -fx-border-radius: 10; -fx-padding: 10;" />
+
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" style="-fx-background-radius: 10; -fx-border-color: #cbd5e0; -fx-border-radius: 10; -fx-padding: 10;" />
+
+        <Button fx:id="signUpButton" onAction="#onSignUpSubmit" prefWidth="180" style="-fx-background-color: #2b6cb0; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 10;" text="Create Account" />
+
+        <Button fx:id="backToLoginButton" onAction="#onBackToLogin" prefWidth="180" style="-fx-background-color: transparent; -fx-text-fill: #2b6cb0; -fx-font-weight: bold; -fx-underline: true;" text="Back to Login" />
+    </VBox>
+
+</VBox>

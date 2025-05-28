@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.personalbudgetplanner.AddExpenseController"
+            prefWidth="800" prefHeight="500"
+            style="-fx-background-color: linear-gradient(to bottom right, #f0f4f8, #d9e2ec);">
+
+    <!-- Top bar with title and back button -->
+    <top>
+        <HBox spacing="20" style="-fx-background-color: #2b6cb0;">
+            <padding><Insets top="20" bottom="20" left="20" right="20"/></padding>
+
+            <Label text="Add Expense"
+                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
+
+            <Pane HBox.hgrow="ALWAYS"/>
+
+            <Button fx:id="backButton"
+                    text="Back"
+                    onAction="#onBackClick"
+                    style="-fx-background-color: white; -fx-text-fill: #2b6cb0; -fx-font-weight: bold; -fx-background-radius: 5;" />
+        </HBox>
+    </top>
+
+    <!-- Center content with form -->
+    <center>
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 40;">
+            <Label text="Enter expense details below:"
+                   style="-fx-font-size: 20px; -fx-text-fill: #2a4365; -fx-font-weight: bold;" />
+
+            <TextField fx:id="expenseNameField" promptText="Expense Name" prefWidth="300" />
+            <TextField fx:id="expenseAmountField" promptText="Amount" prefWidth="300" />
+            <DatePicker fx:id="datePicker" promptText="Date" prefWidth="300" />
+
+            <ComboBox fx:id="categoryComboBox" promptText="Select Category" prefWidth="300" />
+
+            <Button text="Add Expense"
+                    onAction="#onAddExpenseSubmit"
+                    prefWidth="160"
+                    style="-fx-background-color: #3182ce; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 12;" />
+        </VBox>
+    </center>
+</BorderPane>
