@@ -6,9 +6,8 @@
 
 <BorderPane prefHeight="500" prefWidth="800" style="-fx-background-color: linear-gradient(to bottom right, #f0f4f8, #d9e2ec);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalbudgetplanner.DashboardController">
 
-    <!-- Header -->
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="3.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #2b6cb0;">
+        <HBox alignment="CENTER_LEFT" prefHeight="50" prefWidth="800" spacing="20" style="-fx-background-color: #2b6cb0;">
             <padding>
                 <Insets bottom="15" left="20" right="20" top="15" />
             </padding>
@@ -18,26 +17,21 @@
         </HBox>
     </top>
 
-    <!-- Main Content -->
     <center>
-        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;">
-            <Label style="-fx-font-size: 22px; -fx-text-fill: #2a4365; -fx-font-weight: bold;" text="Welcome to Personal Budget Planner" />
+        <VBox alignment="CENTER" prefHeight="488.0" prefWidth="830.0" spacing="30" style="-fx-padding: 40;">
+            <Label prefWidth="394.0" style="-fx-font-size: 22px; -fx-text-fill: #2a4365; -fx-font-weight: bold;" text="Welcome to Personal Budget Planner" />
 
-            <!-- Add & Reset Group -->
             <HBox alignment="CENTER" spacing="20">
+                <Button fx:id="setBudgetButton" onAction="#handleSetBudget" prefHeight="113.0" prefWidth="212.0" style="-fx-background-color: #ed8936; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 20;" text="Set Budget" />
                 <Button fx:id="addExpenseButton" onAction="#handleAddExpense" prefHeight="112.0" prefWidth="212.0" style="-fx-background-color: #3182ce; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 20;" text="Add Expense" />
-
-                <Button fx:id="resetButton" onAction="#handleReset" prefHeight="113.0" prefWidth="212.0" style="-fx-background-color: #e53e3e; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 20;" text="Reset Add Expense" />
             </HBox>
 
-            <!-- Divider Line -->
-            <Separator prefWidth="400" style="-fx-background-color: #cbd5e0;" />
+            <Separator prefHeight="11.0" prefWidth="720.0" style="-fx-background-color: #cbd5e0;" />
 
-            <!-- Reports & Budget Group -->
             <HBox alignment="CENTER" spacing="20">
-                <Button fx:id="viewReportsButton" onAction="#handleViewReports" prefHeight="108.0" prefWidth="212.0" style="-fx-background-color: #38b2ac; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 20;" text="View Reports" />
-
-                <Button fx:id="setBudgetButton" onAction="#handleSetBudget" prefHeight="113.0" prefWidth="212.0" style="-fx-background-color: #ed8936; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 20;" text="Set Budget" />
+                <Button fx:id="viewReportsButton" onAction="#handleViewReports" prefHeight="114.0" prefWidth="221.0" style="-fx-background-color: #38b2ac; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 20;" text="View Reports" />
+                <Button fx:id="summaryDashboardButton" onAction="#handleSummaryDashboard" prefHeight="114.0" prefWidth="221.0" style="-fx-background-color: #805ad5; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 20;" text="Summary Dashboard" />
+                <Button fx:id="resetButton" onAction="#handleReset" prefHeight="113.0" prefWidth="212.0" style="-fx-background-color: #e53e3e; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 20;" text="Reset Expenses" />
             </HBox>
         </VBox>
     </center>

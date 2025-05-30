@@ -1,37 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="500" prefWidth="800" style="-fx-background-color: linear-gradient(to bottom right, #f0f4f8, #d9e2ec);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalbudgetplanner.ViewReportsController">
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.personalbudgetplanner.ViewReportsController"
+            prefWidth="900" prefHeight="600">
 
-    <!-- Top bar with title and back button -->
     <top>
-        <HBox prefHeight="13.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #2b6cb0;">
-            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
-
-            <Label style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="View Reports" />
-
-            <Pane HBox.hgrow="ALWAYS" />
-
-            <Button fx:id="backButton" onAction="#onBackClick" style="-fx-background-color: white; -fx-text-fill: #2b6cb0; -fx-font-weight: bold; -fx-background-radius: 5;" text="Back" />
+        <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color: #2b6cb0; -fx-padding: 20;">
+            <Label text="View Reports"
+                   style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="backButton" onAction="#onBackClick" text="Back"
+                    style="-fx-background-color: white; -fx-text-fill: #2b6cb0; -fx-font-weight: bold; -fx-background-radius: 5;"/>
         </HBox>
     </top>
 
-    <!-- Center VBox with month selector, buttons, and textarea -->
     <center>
-        <VBox alignment="TOP_CENTER" spacing="20" style="-fx-padding: 40;">
+        <VBox spacing="15" alignment="TOP_CENTER" style="-fx-padding: 20;">
 
-            <!-- Month selection ComboBox -->
-            <ComboBox fx:id="monthComboBox" prefWidth="160" promptText="Select Month" />
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Select Month:" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="monthComboBox" prefWidth="180" promptText="Select Month"/>
+                <Label text="Select Year:" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="yearComboBox" prefWidth="120" promptText="Select Year"/>
+            </HBox>
 
-            <Button onAction="#onGenerateReportClick" prefWidth="160" style="-fx-background-color: #38b2ac; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 12;" text="Generate Report" />
+            <HBox spacing="15" alignment="CENTER">
+                <Button onAction="#onGenerateReportClick" prefWidth="160" text="Generate Report"
+                        style="-fx-background-color: #38b2ac; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 12;"/>
+                <Button onAction="#onResetClick" prefWidth="160" text="Close"
+                        style="-fx-background-color: #e53e3e; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 12;"/>
+            </HBox>
 
-            <Button onAction="#onResetClick" prefWidth="160" style="-fx-background-color: #e53e3e; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 12;" text="Close" />
+            <BarChart fx:id="budgetChart" prefWidth="850" prefHeight="350" style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 10;">
+                <xAxis>
+                    <CategoryAxis fx:id="xAxis" label="Type"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="yAxis" label="Amount"/>
+                </yAxis>
+            </BarChart>
 
-            <TextArea fx:id="reportTextArea" editable="false" prefHeight="300" prefWidth="700" promptText="Your reports will appear here..." style="-fx-font-size: 14px; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #38b2ac;" wrapText="true" />
-
+            <TextArea fx:id="reportTextArea" editable="false" prefWidth="850" prefHeight="250" promptText="Your reports will appear here..."
+                      style="-fx-font-size: 14px; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #38b2ac;" wrapText="true"/>
         </VBox>
     </center>
+
 </BorderPane>

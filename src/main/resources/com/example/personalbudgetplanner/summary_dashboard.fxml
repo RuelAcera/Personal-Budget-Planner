@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="500" prefWidth="700" style="-fx-background-color: linear-gradient(to bottom right, #e0f2fe, #bae6fd);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalbudgetplanner.SummaryDashboardController">
+
+    <top>
+        <HBox spacing="20" style="-fx-background-color: #0284c7; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);">
+            <Label style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;" text="Expense Summary Dashboard" />
+
+            <!-- Year ChoiceBox -->
+            <ChoiceBox fx:id="yearChoiceBox" prefWidth="100" style="-fx-background-radius: 8; -fx-padding: 4 8; -fx-font-weight: bold;" />
+
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button fx:id="backButton" onAction="#onBackClick" style="-fx-background-color: white; -fx-text-fill: #0284c7; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 6 16; -fx-cursor: hand;" text="Back" />
+        </HBox>
+    </top>
+
+    <center>
+        <HBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="30" style="-fx-padding: 30;">
+            <!-- Summary Card -->
+            <VBox prefHeight="400" prefWidth="320" spacing="10" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 4);">
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a;" text="Expense Summary" />
+                <TextArea fx:id="summaryTextArea" editable="false" prefHeight="394.0" prefWidth="250.0" style="-fx-font-family: 'Courier New'; -fx-font-size: 14px; -fx-border-color: transparent; -fx-focus-color: transparent; -fx-background-color: transparent;" wrapText="true" />
+            </VBox>
+
+            <!-- Pie Chart and Bar Chart Card -->
+            <VBox prefHeight="500.0" prefWidth="325.0" spacing="10" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 4);">
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a;" text="Category Breakdown" />
+                <PieChart fx:id="expensePieChart" prefHeight="198.0" prefWidth="280.0" />
+
+                <Label prefHeight="33.0" prefWidth="149.0" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a; -fx-padding: 10 0 0 0;" text="Budget vs Expenses" />
+                <BarChart fx:id="budgetBarChart" prefHeight="190.0" prefWidth="354.0">
+                    <xAxis>
+                        <CategoryAxis label="Month" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis prefHeight="132.0" prefWidth="42.0" />
+                    </yAxis>
+                </BarChart>
+            </VBox>
+        </HBox>
+    </center>
+
+</BorderPane>

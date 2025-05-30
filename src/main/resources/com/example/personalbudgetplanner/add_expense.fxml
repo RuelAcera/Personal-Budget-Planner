@@ -36,6 +36,13 @@
             <TextField fx:id="expenseAmountField" promptText="Amount" prefWidth="300" />
             <DatePicker fx:id="datePicker" promptText="Date" prefWidth="300" />
 
+            <HBox spacing="10" alignment="CENTER" prefWidth="300">
+                <ComboBox fx:id="hourComboBox" prefWidth="60" promptText="HH" />
+                <Label text=":" style="-fx-font-size: 18px; -fx-text-fill: #2a4365;" />
+                <ComboBox fx:id="minuteComboBox" prefWidth="60" promptText="MM" />
+                <ComboBox fx:id="amPmComboBox" prefWidth="80" promptText="AM/PM" />
+            </HBox>
+
             <ComboBox fx:id="categoryComboBox" promptText="Select Category" prefWidth="300" />
 
             <Button text="Add Expense"

@@ -24,10 +24,16 @@ public class DashboardController {
     private Button viewReportsButton;
 
     @FXML
+    private Button summaryDashboardButton;
+
+    @FXML
     private Button logoutButton;
 
     @FXML
     private Button resetButton;
+
+    @FXML
+    private Button fullScreenButton;  // New button reference
 
     @FXML
     private void handleAddExpense() {
@@ -45,9 +51,13 @@ public class DashboardController {
     }
 
     @FXML
+    private void handleSummaryDashboard() {
+        loadScene("summary_dashboard.fxml", summaryDashboardButton, "Summary Dashboard");
+    }
+
+    @FXML
     private void handleLogout() {
-        // Clear session on logout
-        Session.setCurrentUser();
+        Session.setCurrentUser(null);
         loadScene("login.fxml", logoutButton, "Login");
     }
 
@@ -69,9 +79,6 @@ public class DashboardController {
         });
     }
 
-    /**
-     * Clears user-specific data files: expenses, budgets, and reports.
-     */
     private void resetAllUserData() {
         String currentUser = Session.getCurrentUser();
         if (currentUser == null || currentUser.isEmpty()) {
@@ -79,7 +86,6 @@ public class DashboardController {
             return;
         }
 
-        // User-specific files (assuming format is consistent with your previous code)
         String[] userFiles = {
                 "expenses_" + currentUser + ".txt",
                 "budget_" + currentUser + ".txt",
@@ -91,12 +97,10 @@ public class DashboardController {
         for (String filename : userFiles) {
             Path filePath = Paths.get(filename);
             try {
-                // If file does not exist, create it
                 if (!Files.exists(filePath)) {
                     Files.createFile(filePath);
                 }
-                // Clear file contents
-                Files.write(filePath, new byte[0]);
+                Files.write(filePath, new byte[0]);  // Clear file content
             } catch (IOException e) {
                 e.printStackTrace();
                 allCleared = false;
@@ -110,9 +114,6 @@ public class DashboardController {
         }
     }
 
-    /**
-     * Utility to load another FXML scene.
-     */
     private void loadScene(String fxmlFileName, Button sourceButton, String title) {
         try {
             String path = "/com/example/personalbudgetplanner/" + fxmlFileName;
@@ -124,22 +125,29 @@ public class DashboardController {
                 return;
             }
 
+            System.out.println("FXML file found at: " + resource);
+
             FXMLLoader loader = new FXMLLoader(resource);
+
             Scene scene = new Scene(loader.load());
 
             Stage stage = (Stage) sourceButton.getScene().getWindow();
             stage.setScene(scene);
             stage.setTitle(title);
+
+            System.out.println("Scene loaded successfully: " + title);
+
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Failed to load " + title + " screen.\n" + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Unexpected error while loading " + title + " screen.\n" + e.getMessage());
         }
     }
 
-    /**
-     * Show error alert with given message.
-     */
     private void showAlert(String message) {
+        System.err.println("Alert: " + message);
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
@@ -147,14 +155,18 @@ public class DashboardController {
         alert.showAndWait();
     }
 
-    /**
-     * Show info alert with given message.
-     */
     private void showInfo(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    // New method: toggles fullscreen mode
+    @FXML
+    private void handleFullScreenToggle() {
+        Stage stage = (Stage) fullScreenButton.getScene().getWindow();
+        stage.setFullScreen(!stage.isFullScreen());
     }
 }

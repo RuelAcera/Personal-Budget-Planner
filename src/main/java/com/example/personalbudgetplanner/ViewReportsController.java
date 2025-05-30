@@ -1,200 +1,177 @@
+// ViewReportsController.java
+
 package com.example.personalbudgetplanner;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
 
 public class ViewReportsController {
+
+    @FXML
+    private ComboBox<String> monthComboBox;
+
+    @FXML
+    private ComboBox<String> yearComboBox;
 
     @FXML
     private Button backButton;
 
     @FXML
+    private BarChart<String, Number> budgetChart;
+
+    @FXML
+    private CategoryAxis xAxis;
+
+    @FXML
+    private NumberAxis yAxis;
+
+    @FXML
     private TextArea reportTextArea;
 
-    @FXML
-    private ComboBox<String> monthComboBox;
-
-    private final String currentUser = Session.currentUser;
+    private final String currentUser = Session.getCurrentUser();
 
     @FXML
-    private void initialize() {
-        reportTextArea.clear();
-
-        // Initialize monthComboBox with months
+    public void initialize() {
         monthComboBox.getItems().addAll(
                 "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
         );
+
+        yearComboBox.getItems().addAll("2023", "2024", "2025");
+
+        monthComboBox.getSelectionModel().selectFirst();
+        yearComboBox.getSelectionModel().selectFirst();
+
+        xAxis.setLabel("Type");
+        yAxis.setLabel("Amount");
+        xAxis.setTickLabelRotation(45);
     }
 
     @FXML
     private void onBackClick() {
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("Dashboard.fxml"));
-            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load());
-            javafx.stage.Stage stage = (javafx.stage.Stage) backButton.getScene().getWindow();
-            stage.setScene(scene);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
             stage.setTitle("Dashboard");
+            stage.show();
         } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to load dashboard.");
+            e.printStackTrace();
         }
     }
 
     @FXML
     private void onGenerateReportClick() {
-        String selectedMonthStr = monthComboBox.getSelectionModel().getSelectedItem();
-        if (selectedMonthStr == null || selectedMonthStr.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "No Month Selected", "Please select a month to generate the report.");
+        String selectedMonth = monthComboBox.getValue();
+        String selectedYear = yearComboBox.getValue();
+
+        if (selectedMonth == null || selectedYear == null) {
+            reportTextArea.setText("Please select a month and year to generate report.");
             return;
         }
 
-        String report = generateReportFromFiles(selectedMonthStr);
+        budgetChart.getData().clear();
 
-        if (report.isEmpty() || report.trim().isEmpty()) {
-            reportTextArea.setText("No data to display.");
-        } else {
-            reportTextArea.setText(report);
+        // Get budget from BudgetManager
+        double budgetAmount = BudgetManager.getBudgetForMonth(currentUser, selectedMonth, selectedYear);
+
+        // Get expenses
+        double totalExpenses = 0;
+        StringBuilder expenseDetails = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("expenses_" + currentUser + ".txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 5) {
+                    String expenseName = parts[0];
+                    String expenseAmountStr = parts[1];
+                    String expenseDate = parts[2];
+                    String expenseTime = parts[3];
+                    String expenseCategory = parts[4];
+
+                    if (expenseDate.startsWith(selectedYear + "-" + getMonthNumber(selectedMonth))) {
+                        try {
+                            double expenseAmount = Double.parseDouble(expenseAmountStr);
+                            totalExpenses += expenseAmount;
+
+                            expenseDetails.append(String.format("%s: ₱%.2f on %s %s (%s)%n",
+                                    expenseName, expenseAmount, expenseDate, expenseTime, expenseCategory));
+                        } catch (NumberFormatException ignored) {
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            reportTextArea.setText("Failed to load expenses.");
+            return;
         }
+
+        double savings = budgetAmount - totalExpenses;
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName(selectedMonth + " " + selectedYear + " Budget Report");
+        series.getData().add(new XYChart.Data<>("Budget", budgetAmount));
+        series.getData().add(new XYChart.Data<>("Expenses", totalExpenses));
+        series.getData().add(new XYChart.Data<>("Savings", savings));
+
+        budgetChart.getData().add(series);
+
+        StringBuilder report = new StringBuilder();
+        report.append("Monthly Budget Report for ").append(selectedMonth).append(" ").append(selectedYear).append("\n\n");
+        report.append("Budget Amount: ₱").append(String.format("%.2f", budgetAmount)).append("\n");
+        report.append("Total Expenses: ₱").append(String.format("%.2f", totalExpenses)).append("\n");
+        report.append("Savings: ₱").append(String.format("%.2f", savings)).append("\n\n");
+
+        if (expenseDetails.length() > 0) {
+            report.append("Expenses Breakdown:\n");
+            report.append(expenseDetails);
+        } else {
+            report.append("No expenses recorded for this month.");
+        }
+
+        reportTextArea.setText(report.toString());
+    }
+
+    private String getMonthNumber(String monthName) {
+        return switch (monthName) {
+            case "January" -> "01";
+            case "February" -> "02";
+            case "March" -> "03";
+            case "April" -> "04";
+            case "May" -> "05";
+            case "June" -> "06";
+            case "July" -> "07";
+            case "August" -> "08";
+            case "September" -> "09";
+            case "October" -> "10";
+            case "November" -> "11";
+            case "December" -> "12";
+            default -> "00";
+        };
     }
 
     @FXML
     private void onResetClick() {
+        budgetChart.getData().clear();
         reportTextArea.clear();
         monthComboBox.getSelectionModel().clearSelection();
-    }
-
-    private String generateReportFromFiles(String selectedMonthStr) {
-        double totalExpenses = 0;
-        double budgetAmount = 0;
-        int selectedMonth = monthNameToNumber(selectedMonthStr);
-
-        Map<String, Double> categoryTotals = new HashMap<>();
-        List<String> expenseLines = new ArrayList<>();
-
-        // Load budget
-        Map<String, String> budgetMap = BudgetManager.loadUserBudget(currentUser);
-        String monthlyBudgetStr = budgetMap.get("budget_" + selectedMonthStr);
-        if (monthlyBudgetStr != null) {
-            try {
-                budgetAmount = Double.parseDouble(monthlyBudgetStr.trim());
-            } catch (NumberFormatException e) {
-                budgetAmount = 0;
-            }
-        }
-
-        // Read expenses file and filter by selected month
-        File expenseFile = new File("expenses_" + currentUser + ".txt");
-        boolean foundExpenses = false;
-        if (expenseFile.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(expenseFile))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(",");
-                    if (parts.length >= 4) {
-                        String name = parts[0].trim();
-                        double amount;
-                        String date = parts[2].trim();
-                        String category = parts[3].trim();
-
-                        try {
-                            amount = Double.parseDouble(parts[1].trim());
-                        } catch (NumberFormatException e) {
-                            continue;
-                        }
-
-                        if (isDateInMonth(date, selectedMonth)) {
-                            totalExpenses += amount;
-                            categoryTotals.put(category, categoryTotals.getOrDefault(category, 0.0) + amount);
-                            expenseLines.add(String.format("- %s: ₱%.2f (Date: %s, Category: %s)", name, amount, date, category));
-                            foundExpenses = true;
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                // ignore read error
-            }
-        }
-
-        if (budgetAmount == 0 && !foundExpenses) {
-            return "No budget or expenses recorded for " + selectedMonthStr + ".";
-        }
-
-        return buildReport(budgetAmount, totalExpenses, categoryTotals, expenseLines);
-    }
-
-    private String buildReport(double budgetAmount, double totalExpenses, Map<String, Double> categoryTotals, List<String> expenseLines) {
-        double remainingBudget = budgetAmount - totalExpenses;
-        StringBuilder report = new StringBuilder();
-
-        report.append("===== Personal Budget Report =====\n");
-        report.append(String.format("Total Budget: ₱%.2f\n", budgetAmount));
-        report.append(String.format("Total Expenses: ₱%.2f\n", totalExpenses));
-        report.append(String.format("Remaining Budget: ₱%.2f\n\n", remainingBudget));
-
-        report.append("Category Breakdown:\n");
-        if (categoryTotals.isEmpty()) {
-            report.append("No categories found.\n");
-        } else {
-            for (Map.Entry<String, Double> entry : categoryTotals.entrySet()) {
-                report.append(String.format("- %s: ₱%.2f\n", entry.getKey(), entry.getValue()));
-            }
-        }
-
-        report.append("\nExpense Details:\n");
-        if (expenseLines.isEmpty()) {
-            report.append("No expenses recorded.\n");
-        } else {
-            for (String line : expenseLines) {
-                report.append(line).append("\n");
-            }
-        }
-
-        report.append("\nThank you for using Personal Budget Planner!");
-        return report.toString();
-    }
-
-    private boolean isDateInMonth(String date, int month) {
-        if (date == null || date.length() < 7) return false;
-        try {
-            int expenseMonth = Integer.parseInt(date.substring(5, 7));
-            return expenseMonth == month;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private int monthNameToNumber(String monthName) {
-        switch (monthName.toLowerCase()) {
-            case "january": return 1;
-            case "february": return 2;
-            case "march": return 3;
-            case "april": return 4;
-            case "may": return 5;
-            case "june": return 6;
-            case "july": return 7;
-            case "august": return 8;
-            case "september": return 9;
-            case "october": return 10;
-            case "november": return 11;
-            case "december": return 12;
-            default: return 0;
-        }
-    }
-
-    private static void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        yearComboBox.getSelectionModel().clearSelection();
     }
 }

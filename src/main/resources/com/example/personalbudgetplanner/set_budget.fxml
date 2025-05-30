@@ -3,30 +3,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom right, #f0f4f8, #d9e2ec);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.personalbudgetplanner.SetBudgetController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.personalbudgetplanner.SetBudgetController"
+            prefWidth="600" prefHeight="400" style="-fx-background-color: #f0f4f8;">
+    <children>
+        <Label text="Set Budget" layoutX="240" layoutY="30" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
-    <!-- Top bar with title and back button -->
-    <top>
-        <HBox prefHeight="0.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #2b6cb0; -fx-padding: 20;">
-            <Label prefHeight="0.0" prefWidth="174.0" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="Set Monthly Budget" />
-            <Pane HBox.hgrow="ALWAYS" />
-            <Button fx:id="backButton" onAction="#onBackClicked" style="-fx-background-color: white; -fx-text-fill: #2b6cb0; -fx-font-weight: bold; -fx-background-radius: 5;" text="Back" />
-        </HBox>
-    </top>
+        <Label text="Select Month:" layoutX="100" layoutY="100" />
+        <ComboBox fx:id="monthComboBox" layoutX="220" layoutY="95" prefWidth="200"/>
 
-    <center>
-        <VBox alignment="CENTER" spacing="20" style="-fx-padding: 40;">
-            <Label style="-fx-font-size: 14px; -fx-text-fill: #2a4365;" text="Select Month:" />
-            <ComboBox fx:id="monthComboBox" prefWidth="300" />
+        <Label text="Select Year:" layoutX="100" layoutY="150" />
+        <ComboBox fx:id="yearComboBox" layoutX="220" layoutY="145" prefWidth="200"/>
 
-            <Label style="-fx-font-size: 16px; -fx-text-fill: #2a4365; -fx-font-weight: bold;" text="Enter your monthly budget amount:" />
-            <TextField fx:id="amountField" prefWidth="300" promptText="Budget Amount" />
+        <Label text="Budget Amount:" layoutX="100" layoutY="200" />
+        <TextField fx:id="budgetAmountField" layoutX="220" layoutY="195" prefWidth="200"/>
 
-            <HBox alignment="CENTER" spacing="15">
-                <Button fx:id="saveBudgetButton" onAction="#onAddOrUpdateBudget" prefWidth="120" style="-fx-background-color: #3182ce; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" text="Save Budget" />
-
-                <Button fx:id="deleteBudgetButton" onAction="#onDeleteBudget" prefWidth="120" style="-fx-background-color: #e53e3e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" text="Delete Budget" />
-            </HBox>
-        </VBox>
-    </center>
-</BorderPane>
+        <Button fx:id="saveButton" text="Save" layoutX="220" layoutY="250" prefWidth="100" onAction="#onSaveClick"/>
+        <Button fx:id="backButton" text="Back" layoutX="340" layoutY="250" prefWidth="100" onAction="#onBackClick"/>
+    </children>
+</AnchorPane>

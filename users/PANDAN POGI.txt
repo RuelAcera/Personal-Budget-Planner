@@ -1,1 +1,11 @@
-budget_May=100
+budget_end_time_May_2025=2025-06-29T23:59
+budget_end_May=2025-06-28
+budget_end_time_May=2025-06-28T23:59
+budget_start_time_May_2025=2025-05-29T00:00
+budget_start_May_2025=2025-05-29
+budget_start_May=2025-05-28
+budget_May=10000
+budget_May_2025=1000000
+budget_December=100000
+budget_end_May_2025=2025-06-29
+budget_start_time_May=2025-05-28T00:00

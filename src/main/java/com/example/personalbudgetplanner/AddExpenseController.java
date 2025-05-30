@@ -23,26 +23,52 @@ public class AddExpenseController {
     private ComboBox<String> categoryComboBox;
 
     @FXML
+    private ComboBox<String> hourComboBox;
+
+    @FXML
+    private ComboBox<String> minuteComboBox;
+
+    @FXML
+    private ComboBox<String> amPmComboBox;
+
+    @FXML
     private Button backButton;
 
-    private final String currentUser = Session.currentUser;
+    private final String currentUser = Session.getCurrentUser();
 
     @FXML
     private void initialize() {
-        // Load predefined categories
-        categoryComboBox.getItems().addAll("Food", "Transportation", "Utilities", "Entertainment", "Other");
+        categoryComboBox.getItems().addAll(
+                "Food", "Transportation Expenses", "Utilities", "Entertainment",
+                "Electronic device", "Gadgets", "Clothing", "Health",
+                "Education", "Travel Expenses", "Tax Property", "Other"
+        );
+
+        for (int i = 1; i <= 12; i++) {
+            hourComboBox.getItems().add(String.format("%02d", i));
+        }
+
+        for (int i = 0; i < 60; i++) {
+            minuteComboBox.getItems().add(String.format("%02d", i));
+        }
+
+        amPmComboBox.getItems().addAll("AM", "PM");
     }
 
     @FXML
     private void onAddExpenseSubmit() {
-        String name = expenseNameField.getText();
-        String amountText = expenseAmountField.getText();
+        String name = expenseNameField.getText().trim();
+        String amountText = expenseAmountField.getText().trim();
         String category = categoryComboBox.getValue();
         LocalDate date = datePicker.getValue();
 
-        // Validate user input
-        if (name.isEmpty() || amountText.isEmpty() || date == null || category == null) {
-            showAlert(Alert.AlertType.WARNING, "Input Error", "Please fill in all fields.");
+        String hour = hourComboBox.getValue();
+        String minute = minuteComboBox.getValue();
+        String amPm = amPmComboBox.getValue();
+
+        if (name.isEmpty() || amountText.isEmpty() || date == null || category == null
+                || hour == null || minute == null || amPm == null) {
+            showAlert(Alert.AlertType.WARNING, "Input Error", "Please fill in all fields, including time.");
             return;
         }
 
@@ -50,12 +76,13 @@ public class AddExpenseController {
         try {
             amount = Double.parseDouble(amountText);
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Amount must be a number.");
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Amount must be a valid number.");
             return;
         }
 
-        // Format: name,amount,date,category
-        String line = String.format("%s,%.2f,%s,%s%n", name, amount, date, category);
+        String time = hour + ":" + minute + " " + amPm;
+
+        String line = String.format("%s,%.2f,%s,%s,%s%n", name, amount, date, time, category);
 
         try (FileWriter writer = new FileWriter("expenses_" + currentUser + ".txt", true)) {
             writer.write(line);
@@ -66,11 +93,14 @@ public class AddExpenseController {
 
         showAlert(Alert.AlertType.INFORMATION, "Success", "Expense added successfully!");
 
-        // Clear form
+        // Clear inputs after adding expense
         expenseNameField.clear();
         expenseAmountField.clear();
         datePicker.setValue(null);
         categoryComboBox.getSelectionModel().clearSelection();
+        hourComboBox.getSelectionModel().clearSelection();
+        minuteComboBox.getSelectionModel().clearSelection();
+        amPmComboBox.getSelectionModel().clearSelection();
     }
 
     @FXML

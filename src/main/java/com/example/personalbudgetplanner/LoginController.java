@@ -38,7 +38,7 @@ public class LoginController {
         Map<String, String> users = UserDatabase.loadUsers();
         if (users.containsKey(username) && users.get(username).equals(password)) {
             // Store logged-in user in Session
-            Session.currentUser = username;
+            Session.setCurrentUser(username);  // correct usage
 
             // Load dashboard
             try {
